@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Shopping List</title>
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.0.0/css/font-awesome.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+    <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css' integrity='sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm' crossorigin='nonymous'>
+</head>
+<body>
+
+<div class="paperList">
+<h1>Shopping List</h1>
+<hr class="firstLine">
+Milk
+<hr class="secondLine">
+Brocolli
+<hr class="secondLine">
+Donuts
+<hr class="secondLine">
+Peanut Butter
+<hr class="secondLine">
+Pancakes
+<hr class="secondLine">
+Chocolate Chips
+<hr class="secondLine">
+<div id="shoppingItems"></div>
+<form id="movie-form">
+      <input type="text" id="giphy-input" placeholder="Grocery Item">
+
+      <button type="button" class="btn btn-warning" id="add-giphy" type="submit">
+               
+           <i class="fas fa-pencil-alt"></i>
+      </button>
+      </input>
+    </form>
+    <hr class="secondLine">
+    <h1>Drop it in the Cart!</h1>
+    <hr class="secondLine">
+    <div id="buttons-view"></div>
+    <hr class="secondLine">
+    <div id="movies-view"></div>
+    <div id="giphy-display"></div>
+    <img id=shoppingCart src="images/shopping-cart-hi.png">
+</div>
+
+
+</body>
+
+<style>
+
+#shoppingCart {
+    max-width:100%;
+    max-height:100%;
+}
+
+#giphPlacement {
+    margin-bottom: -70%;
+    margin-left: 8%;
+}
+
+h1 {
+    margin-top: 7%;
+    margin-bottom: -5.5%;
+}
+
+body {
+    background-image: url("images/170627-better-grocery-store-main-se-539p_80a9ba9c8d466788799ca27568ee0d43.jpg");
+    background-size:     cover;
+    background-repeat:   no-repeat;
+    background-position: center top;
+    background-attachment: fixed;
+    color: #000;
+    font-family: Post Note;
+    src: url('Post_Note.ttf');
+    font-size: 150%;
+}
+
+.paperList {
+    background-color: #F3F1E8;
+    margin-top: 6%;
+    margin-left: 6%;
+    margin-right: 60%;
+    margin-bottom: 6%;
+    padding-right: 2%;
+    padding-left: 2%;
+    padding-top: 1.5%;
+    padding-bottom: 2.5%;
+    opacity: 0.95;
+    filter: alpha(opacity=95);
+}
+
+.firstLine {
+    background-color: #B86B8B;
+    height: 6px;
+    border: none;
+}
+
+.secondLine {
+    background-color: #8FA0AC;
+    height: 6px;
+    border: none;
+}
+
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+
+      var groceryItems = ["Milk", "Brocolli", "Donuts", "Peanut Butter", "Pancakes", "Chocolate Chips"];
+
+// Something here
+
+        function displayItemInfo() {
+
+        var userInput = $(this).attr("data-name");
+        
+        userInput = userInput.replace(/ /g, "+");
+
+        var queryURL = 'http://api.giphy.com/v1/gifs/search?q=' + userInput + '&api_key=dc6zaTOxFJmzC';
+
+        $.ajax({url: queryURL, method: 'GET'}).done(function(response){
+
+          console.log(response.data);
+
+          var giphyURL = response.data[0].images.fixed_height.url;
+
+          console.log(giphyURL)
+
+          $('#giphy-display').attr('src', giphyURL);
+
+          $('#giphy-display').append("<img id='giphPlacement' src='" + giphyURL + "'>");
+
+        });
+
+        }
+
+// Something out
+
+        function renderButtons() {
+
+            $("#buttons-view").empty();
+
+                for (var i = 0; i < groceryItems.length; i++) {
+
+                var a = $("<button class='btn btn-primary'>");
+
+                a.addClass("movie-btn");
+
+                a.attr("data-name", groceryItems[i]);
+
+                a.text(groceryItems[i]);
+
+                $("#buttons-view").append(a);
+            }
+        }
+
+      $('#add-giphy').on('click', function(){
+
+        event.preventDefault();
+
+        var userInput = $('#giphy-input').val().trim();
+
+        $("#shoppingItems").append(userInput + "<hr class='secondLine'>");
+
+        groceryItems.push(userInput);
+
+        renderButtons();
+      });
+
+      $(document).on("click", ".movie-btn", displayItemInfo);
+
+    renderButtons();
+
+    </script>
+
+</html>
